@@ -2,6 +2,13 @@
 
 Queries [TMDB](https://www.themoviedb.org) for movie data, and stores it in mongodb ready for consumption.
 
+## Todo
+
+* Collect information on movies, such as director, etc.
+* Change all references of movie to film because we're British.
+* Decide on shape of data for reviews
+* Using /review/id, get the full details of a review by id and store in mongodb
+
 ## Environment variables
 
 `TMDB_API_KEY` - API key for themoviedb.org

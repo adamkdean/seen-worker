@@ -1,3 +1,8 @@
+/*eslint spaced-comment: ["off"]*/
+/*eslint strict: ["off"]*/
+
+'use strict';
+
 const del = require('del');
 const gulp = require('gulp');
 const babel = require('gulp-babel');

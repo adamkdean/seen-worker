@@ -16,7 +16,11 @@
   "license": "MIT",
   "homepage": "https://bitbucket.org/seenproject/worker#readme",
   "dependencies": {
-    "babel-runtime": "^6.3.19"
+    "babel-runtime": "^6.3.19",
+    "lodash": "^4.11.1",
+    "mongodb": "^2.1.16",
+    "moviedb": "^0.2.3",
+    "nomoreunhandledrejections": "^0.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.0",
@@ -35,6 +39,7 @@
     "gulp-babel": "^6.1.1",
     "gulp-eslint": "^2.0.0",
     "gulp-notice": "^1.0.3",
-    "gulp-util": "^3.0.7"
+    "gulp-util": "^3.0.7",
+    "webpack": "^1.13.0"
   }
 }

@@ -1,0 +1,23 @@
+{
+  "extends": "airbnb",
+
+  "parser": "babel-eslint",
+
+  "plugins": [
+    "babel"
+  ],
+  
+  "rules": {
+    "comma-dangle": [2, "never"],
+    "indent": [2, 2, {"VariableDeclarator": { "var": 2, "let": 2, "const": 3 }, "SwitchCase": 1}],
+    "one-var": [2, {
+      "var": "always",
+      "let": "always",
+      "const": "never"
+    }],
+    "max-len": [2, 120, 2, {
+      "ignoreUrls": true,
+      "ignoreComments": false
+    }]
+  }
+}

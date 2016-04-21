@@ -1,14 +1,12 @@
 # worker
 
-Queries [TMDB](https://www.themoviedb.org) for movie data, and stores it in mongodb ready for consumption.
+Queries [TMDB](https://www.themoviedb.org) for film data, and stores it in mongodb ready for consumption.
 
 ## Todo
 
-* Collect information on movies, such as director, etc.
-* Change all references of movie to film because we're British.
-* Decide on shape of data for reviews
-* Using /review/id, get the full details of a review by id and store in mongodb
+* Collect information on films, such as director, etc.
 * Pick up a list of genres so we can match them to genre id
+* Tidy up the refresh file
 
 ## Environment variables
 
@@ -31,6 +29,6 @@ Because IMDb make it incredibly hard for you to get at their data. They give you
 
 ## Limitations
 
-TMDB, along with most other data sources I found, only offer immediate statistics. This means we don't have easy access to real data for things like the most popular movies in "the last week", "the last month", "the last year" etc. We only have access to the most popular movies "right now".
+TMDB, along with most other data sources I found, only offer immediate statistics. This means we don't have easy access to real data for things like the most popular films in "the last week", "the last month", "the last year" etc. We only have access to the most popular films "right now".
 
 What we can do, for the sake of the demo, is Cornelius Fudge the numbers to make it look like we have historical data.

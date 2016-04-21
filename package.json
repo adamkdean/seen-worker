@@ -17,6 +17,7 @@
   "homepage": "https://bitbucket.org/seenproject/worker#readme",
   "dependencies": {
     "babel-runtime": "^6.3.19",
+    "es6-sleep": "^2.0.2",
     "lodash": "^4.11.1",
     "mongodb": "^2.1.16",
     "moviedb": "^0.2.3",

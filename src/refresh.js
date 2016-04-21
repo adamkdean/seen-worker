@@ -62,10 +62,10 @@ const updateReviews = async (db, filmId) => {
     const modified = Object.assign({}, original, {
       _id: original.id,
       filmId: filmId,
-      popularity_last_week: generateMockPopularity(500),
-      popularity_last_month: generateMockPopularity(2000),
-      popularity_last_year: generateMockPopularity(20000),
-      popularity_all_time: generateMockPopularity(50000)
+      popularity_last_week: generateMockPopularity(50),
+      popularity_last_month: generateMockPopularity(200),
+      popularity_last_year: generateMockPopularity(2000),
+      popularity_all_time: generateMockPopularity(5000)
     });
 
     await db.collection('reviews').update(

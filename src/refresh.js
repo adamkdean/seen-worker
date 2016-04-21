@@ -57,6 +57,9 @@ const updateReviews = async (db, filmId) => {
       popularity_all_time: generateMockPopularity(5000)
     });
 
+    // I don't like having _id and id hanging around
+    delete modified.id;
+
     await db.collection('reviews').update(
       { _id: modified._id },
       modified,
@@ -88,15 +91,18 @@ const updateFilms = async (db) => {
       popularity_all_time: generateMockPopularity(original.popularity)
     });
 
+    // I don't like having _id and id hanging around
+    delete modified.id;
+
     await db.collection('films').update(
       { _id: modified._id },
       modified,
       { upsert: true }
     );
 
-    await updateReviews(db, original.id);
+    await updateReviews(db, modified._id);
 
-    console.log(`Updated ${popularFilms.results[i].title}, now waiting ${throttleInterval} ms...`);
+    console.log(`Updated ${modified.title}, now waiting ${throttleInterval} ms...`);
     await sleep(throttleInterval);
   }
 

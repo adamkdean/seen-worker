@@ -26,10 +26,37 @@ const updateFilms = async (db) => {
   const popularFilms = await performAsyncRequest('miscPopularMovies', {});
   console.log(`Retrieved ${popularFilms.results.length} films...`);
 
+  let genreList = await performAsyncRequest('genreList');
+
+  genreList = genreList.genres.map((genre) => { return { _id: genre.id, name: genre.name } });
+  console.log(genreList);
+
+  // http://stackoverflow.com/questions/36773765/how-can-i-upsert-multiple-objects-with-mongodb-node-js/36773919
+  const x = await db.collection('genres').update({}, genreList, { upsert: true, multi: true });
+  console.log(x);
+
+  // for (let i = 0; i < genres.length; i++) {
+  //   await db.collection('genres').update(
+  //     { _id: genres[i].id },
+  //     genres[i],
+  //     upsert: true
+  //   );
+  // }
+
+  process.exit(0);
+
+
   for (let i = 0; i < popularFilms.results.length; i++) {
     const original = popularFilms.results[i];
+
+    // grab the director (and any other cast/crew we want?)
+    const credits = await performAsyncRequest('movieCredits', { id: original.id, append_to_response: 'director' });
+    const director = credits.crew.filter((member) => member.job === 'Director')[0];
+    const directorName = director && director.name || 'Unknown';
+
     const modified = Object.assign({}, original, {
       _id: original.id,
+      director: directorName,
       popularity_last_week: generateMockPopularity(original.popularity),
       popularity_last_month: generateMockPopularity(original.popularity),
       popularity_last_year: generateMockPopularity(original.popularity),

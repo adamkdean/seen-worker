@@ -10,7 +10,7 @@ Queries [TMDB](https://www.themoviedb.org) for film data, and stores it in mongo
 
 ## Environment variables
 
-`TMDB_API_KEY` - API key for themoviedb.org
+`TMDB_API_KEY` - API key for themoviedb.org  
 `MONGODB_URI` - Connect to mongo with just a URI? No Auth?
 
 ## Third-party Libraries
@@ -32,3 +32,5 @@ Because IMDb make it incredibly hard for you to get at their data. They give you
 TMDB, along with most other data sources I found, only offer immediate statistics. This means we don't have easy access to real data for things like the most popular films in "the last week", "the last month", "the last year" etc. We only have access to the most popular films "right now".
 
 What we can do, for the sake of the demo, is Cornelius Fudge the numbers to make it look like we have historical data.
+
+For reviews, we only get reviews, not popularity or views etc. We'll fudge this data too.

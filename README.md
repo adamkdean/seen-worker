@@ -4,13 +4,11 @@ Queries [TMDB](https://www.themoviedb.org) for film data, and stores it in mongo
 
 ## Todo
 
-* Collect information on films, such as director, etc.
-* Pick up a list of genres so we can match them to genre id
 * Tidy up the refresh file
 
 ## Environment variables
 
-`TMDB_API_KEY` - API key for themoviedb.org  
+`TMDB_API_KEY` - API key for themoviedb.org
 `MONGODB_URI` - Connect to mongo with just a URI? No Auth?
 
 ## Third-party Libraries

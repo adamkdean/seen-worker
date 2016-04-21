@@ -22,29 +22,54 @@ const generateMockPopularity = (popularity) => {
   return popularity + (popularity * (modifier / 2));
 };
 
+const updateGenres = async (db) => {
+  const genreList = await performAsyncRequest('genreList');
+  const genres = genreList.genres;
+
+  // It would be nice to be able to do a single mass upsert concisely, alas, seems not
+  // http://stackoverflow.com/questions/36773765/how-can-i-upsert-multiple-objects-with-mongodb-node-js/36773919
+  for (let i = 0; i < genres.length; i++) {
+    await db.collection('genres').update(
+      { _id: genres[i].id },
+      { name: genres[i].name },
+      { upsert: true }
+    );
+  }
+
+  console.log(`Updated ${genres.length} genres, now waiting ${throttleInterval} ms...`);
+  await sleep(throttleInterval);
+};
+
+// our data source doesn't provide views or popularity of reviews
+// so we're going to mock that data too from a few constants
+const updateReviews = async (db, filmId) => {
+  const reviews = await performAsyncRequest('movieReviews', { id: filmId });
+  console.log(`Retrieved ${reviews.results.length} reviews...`);
+
+  for (let i = 0; i < reviews.results.length; i++) {
+    const original = reviews.results[i];
+    const modified = Object.assign({}, original, {
+      _id: original.id,
+      filmId,
+      popularity_last_week: generateMockPopularity(50),
+      popularity_last_month: generateMockPopularity(200),
+      popularity_last_year: generateMockPopularity(2000),
+      popularity_all_time: generateMockPopularity(5000)
+    });
+
+    await db.collection('reviews').update(
+      { _id: modified._id },
+      modified,
+      { upsert: true }
+    );
+  }
+
+  console.log(`Done updating ${reviews.results.length} reviews`);
+};
+
 const updateFilms = async (db) => {
   const popularFilms = await performAsyncRequest('miscPopularMovies', {});
   console.log(`Retrieved ${popularFilms.results.length} films...`);
-
-  let genreList = await performAsyncRequest('genreList');
-
-  genreList = genreList.genres.map((genre) => { return { _id: genre.id, name: genre.name } });
-  console.log(genreList);
-
-  // http://stackoverflow.com/questions/36773765/how-can-i-upsert-multiple-objects-with-mongodb-node-js/36773919
-  const x = await db.collection('genres').update({}, genreList, { upsert: true, multi: true });
-  console.log(x);
-
-  // for (let i = 0; i < genres.length; i++) {
-  //   await db.collection('genres').update(
-  //     { _id: genres[i].id },
-  //     genres[i],
-  //     upsert: true
-  //   );
-  // }
-
-  process.exit(0);
-
 
   for (let i = 0; i < popularFilms.results.length; i++) {
     const original = popularFilms.results[i];
@@ -69,7 +94,7 @@ const updateFilms = async (db) => {
       { upsert: true }
     );
 
-    updateReviews(db, original.id);
+    await updateReviews(db, original.id);
 
     console.log(`Updated ${popularFilms.results[i].title}, now waiting ${throttleInterval} ms...`);
     await sleep(throttleInterval);
@@ -78,37 +103,11 @@ const updateFilms = async (db) => {
   console.log(`Done updating ${popularFilms.results.length} films`);
 };
 
-// our data source doesn't provide views or popularity of reviews
-// so we're going to mock that data too from a few constants
-const updateReviews = async (db, filmId) => {
-  const reviews = await performAsyncRequest('movieReviews', { id: filmId });
-  console.log(`Retrieved ${reviews.results.length} reviews...`);
-
-  for (let i = 0; i < reviews.results.length; i++) {
-    const original = reviews.results[i];
-    const modified = Object.assign({}, original, {
-      _id: original.id,
-      filmId: filmId,
-      popularity_last_week: generateMockPopularity(50),
-      popularity_last_month: generateMockPopularity(200),
-      popularity_last_year: generateMockPopularity(2000),
-      popularity_all_time: generateMockPopularity(5000)
-    });
-
-    await db.collection('reviews').update(
-      { _id: modified._id },
-      modified,
-      { upsert: true }
-    );
-  }
-
-  console.log(`Done updating ${reviews.results.length} reviews`);
-};
-
 // our main refresh cycle, each run of this will do one single atomic refresh
 // of our data store, including films, their reviews, and any other misc data
 const main = async () => {
   const db = await mongodb.connect(process.env.MONGODB_URI);
+  await updateGenres(db);
   await updateFilms(db);
   db.close();
 };

@@ -37,21 +37,21 @@ const updateGenres = async (db) => {
     );
   }
 
-  console.log(`Updated ${genres.length} genres, now waiting ${throttleInterval} ms...`);
+  console.log(`Updated ${genres.length} genres, now waiting ${throttleInterval} ms...\n`);
   await sleep(throttleInterval);
 };
 
 // our data source doesn't provide views or popularity of reviews
 // so we're going to mock that data too from a few constants
-const updateReviews = async (db, filmId) => {
-  const reviews = await performAsyncRequest('movieReviews', { id: filmId });
+const updateReviews = async (db, film) => {
+  const reviews = await performAsyncRequest('movieReviews', { id: film._id });
   console.log(`Retrieved ${reviews.results.length} reviews...`);
 
   for (let i = 0; i < reviews.results.length; i++) {
     const original = reviews.results[i];
     const modified = Object.assign({}, original, {
       _id: original.id,
-      filmId,
+      filmSlug: film.slug,
       popularity_last_week: generateMockPopularity(50),
       popularity_last_month: generateMockPopularity(50),
       popularity_last_year: generateMockPopularity(50),
@@ -72,10 +72,13 @@ const updateReviews = async (db, filmId) => {
 
 const updateFilms = async (db) => {
   const popularFilms = await performAsyncRequest('miscPopularMovies', {});
-  console.log(`Retrieved ${popularFilms.results.length} films...`);
+  console.log(`Retrieved ${popularFilms.results.length} films...\n`);
 
   for (let i = 0; i < popularFilms.results.length; i++) {
     const original = popularFilms.results[i];
+    const filmSlug = slug(original.title).toLowerCase();
+
+    console.log(`> Updating ${filmSlug} (${i}/${popularFilms.results.length})`);
 
     // grab the director (and any other cast/crew we want?)
     const credits = await performAsyncRequest('movieCredits', { id: original.id, append_to_response: 'director' });
@@ -84,7 +87,7 @@ const updateFilms = async (db) => {
 
     const modified = Object.assign({}, original, {
       _id: original.id,
-      slug: slug(original.title),
+      slug: filmSlug,
       director: directorName,
       popularity_last_week: original.popularity,
       popularity_last_month: generateMockPopularity(original.popularity),
@@ -101,9 +104,9 @@ const updateFilms = async (db) => {
       { upsert: true }
     );
 
-    await updateReviews(db, modified._id);
+    await updateReviews(db, modified);
 
-    console.log(`Updated ${modified.title}, now waiting ${throttleInterval} ms...`);
+    console.log(`Updated ${filmSlug}, now waiting ${throttleInterval} ms...\n`);
     await sleep(throttleInterval);
   }
 

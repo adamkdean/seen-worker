@@ -1,9 +1,9 @@
 const refresh = require('./refresh');
 const interval = 3600000; // hourly ~ 60*60*1000 ms
 
-const tick = () => {
+const tick = async () => {
   console.log('Refreshing data store with fresh data');
-  refresh();
+  await refresh(); 
   setTimeout(tick, interval);
 };
 

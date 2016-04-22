@@ -52,12 +52,11 @@ const updateReviews = async (db, filmId) => {
       _id: original.id,
       filmId,
       popularity_last_week: generateMockPopularity(50),
-      popularity_last_month: generateMockPopularity(200),
-      popularity_last_year: generateMockPopularity(2000),
-      popularity_all_time: generateMockPopularity(5000)
+      popularity_last_month: generateMockPopularity(50),
+      popularity_last_year: generateMockPopularity(50),
+      popularity_all_time: generateMockPopularity(50)
     });
 
-    // I don't like having _id and id hanging around
     delete modified.id;
 
     await db.collection('reviews').update(
@@ -85,14 +84,14 @@ const updateFilms = async (db) => {
     const modified = Object.assign({}, original, {
       _id: original.id,
       director: directorName,
-      popularity_last_week: generateMockPopularity(original.popularity),
+      popularity_last_week: original.popularity,
       popularity_last_month: generateMockPopularity(original.popularity),
       popularity_last_year: generateMockPopularity(original.popularity),
       popularity_all_time: generateMockPopularity(original.popularity)
     });
 
-    // I don't like having _id and id hanging around
     delete modified.id;
+    delete modified.popularity;
 
     await db.collection('films').update(
       { _id: modified._id },

@@ -21,7 +21,8 @@
     "lodash": "^4.11.1",
     "mongodb": "^2.1.16",
     "moviedb": "^0.2.3",
-    "nomoreunhandledrejections": "^0.1.0"
+    "nomoreunhandledrejections": "^0.1.0",
+    "slug": "^0.9.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.0",

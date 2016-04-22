@@ -3,6 +3,7 @@ require('nomoreunhandledrejections')();
 const moviedb = require('moviedb')(process.env.TMDB_API_KEY);
 const mongodb = require('mongodb').MongoClient;
 const sleep = require('es6-sleep').promise;
+const slug = require('slug');
 const throttleInterval = 1000;
 
 // we don't like callbacks, so let's wrap them in a promise
@@ -83,6 +84,7 @@ const updateFilms = async (db) => {
 
     const modified = Object.assign({}, original, {
       _id: original.id,
+      slug: slug(original.title),
       director: directorName,
       popularity_last_week: original.popularity,
       popularity_last_month: generateMockPopularity(original.popularity),

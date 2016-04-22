@@ -6,7 +6,7 @@ const sleep = require('es6-sleep').promise;
 const slug = require('slug');
 const throttleInterval = 1000;
 
-// we don't like callbacks, so let's wrap them in a promise
+// we don't like (too many) callbacks, so let's wrap them in a promise
 // also, we don't like lots of wrappers, so let's make it generic
 const performAsyncRequest = (method, filter) =>
   new Promise((resolve, reject) => {

@@ -23,6 +23,12 @@ const generateMockPopularity = (popularity) => {
   return popularity + (popularity * (modifier / 2));
 };
 
+// themoviedb doesn't provide film length so we'll mock it
+const generateMockFilmLength = () => {
+  const minutes = 30 + Math.round(Math.random() * 30, 0);
+  return `1h ${minutes}m`;
+};
+
 const updateGenres = async (db) => {
   const genreList = await performAsyncRequest('genreList');
   const genres = genreList.genres;
@@ -89,6 +95,7 @@ const updateFilms = async (db) => {
       _id: original.id,
       slug: filmSlug,
       director: directorName,
+      length: generateMockFilmLength(),
       popularity_last_week: original.popularity,
       popularity_last_month: generateMockPopularity(original.popularity),
       popularity_last_year: generateMockPopularity(original.popularity),

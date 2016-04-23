@@ -58,6 +58,7 @@ const updateReviews = async (db, film) => {
     const modified = Object.assign({}, original, {
       _id: original.id,
       filmSlug: film.slug,
+      filmTitle: film.title,
       popularity_last_week: generateMockPopularity(50),
       popularity_last_month: generateMockPopularity(50),
       popularity_last_year: generateMockPopularity(50),

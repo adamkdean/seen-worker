@@ -4,7 +4,9 @@ MAINTAINER Adam K Dean <adamkdean@googlemail.com>
 RUN mkdir /var/app
 COPY . /var/app
 WORKDIR /var/app
-RUN npm install --production --global gulp
-RUN npm install --production
+
+RUN npm config set loglevel warn
+RUN npm install --global gulp
+RUN npm install
 
 CMD ["npm", "start"]

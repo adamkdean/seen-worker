@@ -5,6 +5,7 @@ Queries [TMDB](https://www.themoviedb.org) for film data, and stores it in mongo
 ## Todo
 
 * Tidy up the refresh file
+* Make gulp transpile part of build process
 
 ## Environment variables
 

@@ -10,7 +10,7 @@ SERVICE_NAME="worker"
 docker build -t $SERVICE_NAME .
 
 OUT=$?
-if [ $? -eq 0 ] ; then
+if [ $OUT -eq 0 ] ; then
   # Well the build went ok, quietly kill existing instances and re-run
   docker kill $SERVICE_NAME 2>/dev/null || true
   docker rm -f $SERVICE_NAME 2>/dev/null || true
